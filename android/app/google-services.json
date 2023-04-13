@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "393812356854",
+    "project_id": "pfe-tm-app",
+    "storage_bucket": "pfe-tm-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:393812356854:android:3e36c89bb60659406946d7",
+        "android_client_info": {
+          "package_name": "com.example.task_management_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "393812356854-h93hfl18poqc73gjfr9ma527ekquf76k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCA6fBqT3gYd79xB0IrnbVo97G4QOvg7P0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "393812356854-h93hfl18poqc73gjfr9ma527ekquf76k.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "393812356854-p32dtv09nrk4h91gu1figd39cujf2rgu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.taskManagementApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
