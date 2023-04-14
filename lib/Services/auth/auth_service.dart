@@ -1,6 +1,6 @@
+import 'package:task_management_app/Services/auth/auth_provider.dart';
 import 'package:task_management_app/Services/auth/auth_user.dart';
 import 'package:task_management_app/Services/auth/firebse_auth_provider.dart';
-import 'package:task_management_app/services/auth/auth_provider.dart';
 
 /// Représente un service d'authentification qui délègue l'authentification à un fournisseur
 
@@ -14,8 +14,7 @@ class AuthService implements AuthProvider {
 
   /// Crée une nouvelle instance de [AuthService] qui délègue l'authentification à un fournisseur d'authentification Firebase.
 
-  factory AuthService.firebase() =>
-      AuthService(FirebaseAuthProvider() as AuthProvider);
+  factory AuthService.firebase() => AuthService(FirebaseAuthProvider());
 
   ///La méthode createUser crée un nouvel utilisateur avec l'adresse e-mail et le mot de passe spécifiés. Cette méthode délègue la création de l'utilisateur au fournisseur d'authentification spécifié lors de la création de cette instance de AuthService
   @override
