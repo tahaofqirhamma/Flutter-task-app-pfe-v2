@@ -33,7 +33,7 @@ class HomePage extends StatelessWidget {
         future: AuthService.firebase().initialize(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return const Text('Connection 5dama 9te3 lah ydir l5er');
+            return const SigupView();
           }
           return const CircularProgressIndicator();
         });
