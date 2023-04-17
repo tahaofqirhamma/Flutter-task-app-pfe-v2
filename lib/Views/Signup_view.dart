@@ -4,6 +4,7 @@ import 'package:task_management_app/Constants/Routes.dart';
 import 'package:task_management_app/Services/auth/auth_exceptions.dart';
 import 'package:task_management_app/Services/auth/auth_service.dart';
 import 'package:task_management_app/Utilities/color_app.dart';
+import 'package:task_management_app/Utilities/errors_dialog.dart';
 
 // class SigupView extends StatefulWidget {
 //   const SigupView({super.key});
@@ -123,7 +124,7 @@ class _SigupViewState extends State<SigupView> {
             Container(
               padding: const EdgeInsets.all(20),
               child: Column(children: [
-                for (int i = 1; i < 3; i++)
+                for (int i = 0; i < 3; i++)
                   Container(
                     margin: const EdgeInsets.only(top: 15),
                     child: TextFormField(
@@ -196,29 +197,25 @@ class _SigupViewState extends State<SigupView> {
 
                         // Navigator.of(context).pushNamed(VerifyEmailRoute);
                       } on WeakPasswordAuthException {
-                        // await showErrorDialog(
-                        //   context,
-                        //   'Weak password',
-                        // );
+                        await showErrorDialog(
+                          context,
+                          'Weak password',
+                        );
                       } on EmailAlreadyInUseAuthException {
-                        print("a");
-                        // await showErrorDialog(
-                        //   context,
-                        //   'Email is already in use',
-                        // );
+                        await showErrorDialog(
+                          context,
+                          'Email is already in use',
+                        );
                       } on InvalidEmailAuthException {
-                        print("b");
-                        // await showErrorDialog(
-                        //   context,
-                        //   'This is an invalid email address',
-                        // );
+                        await showErrorDialog(
+                          context,
+                          'This is an invalid email address',
+                        );
                       } on GenericAuthException {
-                        print("c");
-
-                        // await showErrorDialog(
-                        //   context,
-                        //   'Failed to register',
-                        // );
+                        await showErrorDialog(
+                          context,
+                          'Failed to signup',
+                        );
                       }
                     },
                     style: ButtonStyle(
