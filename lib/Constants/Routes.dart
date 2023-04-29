@@ -1,6 +1,6 @@
 const loginRoute = '/login';
 const signupRoute = '/signup';
-// const notesRoute = '/notes/';
+const mytasksRoute = '/mytasks';
 const verifyEmailRoute = '/verifyEmail';
-// const newNoteRoute = 'notes/new_note';
+const myProfieRoute = '/myprofile';
 const homeRoute = '/home';

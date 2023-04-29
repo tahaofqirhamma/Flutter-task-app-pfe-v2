@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:task_management_app/Services/auth/auth_service.dart';
 import 'package:task_management_app/Views/Login_view.dart';
+import 'package:task_management_app/Views/My_profile_view.dart';
 import 'package:task_management_app/Views/Signup_view.dart';
+import 'package:task_management_app/Views/Tasks/myTasks_view.dart';
 import 'package:task_management_app/Views/home_view.dart';
 import 'package:task_management_app/Views/landing_view.dart';
 
@@ -10,6 +12,7 @@ import 'Constants/Routes.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
     title: 'Flutter Demo',
     theme: ThemeData(
       primarySwatch: Colors.blue,
@@ -19,6 +22,8 @@ void main() {
       loginRoute: (context) => const LoginView(),
       signupRoute: (context) => const SigupView(),
       homeRoute: (context) => const HomeView(),
+      myProfieRoute: (context) => const MyProfile(),
+      mytasksRoute: (context) => MyTasksView(),
       // notesRoute: (context) => const NotesView(),
       // verifyEmailRoute: (context) => const VerifyEmailView(),
       // newNoteRoute: (context) => const NewNoteView()
