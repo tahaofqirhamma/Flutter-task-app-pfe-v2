@@ -21,10 +21,12 @@ class AuthService implements AuthProvider {
   Future<AuthUser> createUser({
     required String email,
     required String password,
+    required String username,
   }) async =>
       provider.createUser(
         email: email,
         password: password,
+        username: username,
       );
 
   ///Récupère l'utilisateur actuellement connecté, s'il y en a un.
@@ -53,4 +55,12 @@ class AuthService implements AuthProvider {
   /// La méthode initialize initialise le fournisseur d'authentification spécifié lors de la création de cette instance de AuthService. Cette méthode délègue l'initialisation du fournisseur d'authentification à la méthode initialize du fournisseur d'authentification sous-jacent.
   @override
   Future<void> initialize() => provider.initialize();
+
+  @override
+  Future<void> updateEmail({required String email}) =>
+      provider.updateEmail(email: email);
+
+  @override
+  Future<void> updatePassword({required String password}) =>
+      provider.updatePassword(password: password);
 }

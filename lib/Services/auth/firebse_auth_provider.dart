@@ -1,8 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:task_management_app/Services/auth/auth_exceptions.dart';
 import 'package:task_management_app/Services/auth/auth_provider.dart';
 import 'package:task_management_app/Services/auth/auth_user.dart';
+import 'package:task_management_app/Services/cloud/user/cloud_user.dart';
+import 'package:task_management_app/Services/cloud/user/cloud_user_constants.dart';
+import 'package:task_management_app/Services/cloud/user/cloud_user_exceptions.dart';
 import 'package:task_management_app/firebase_options.dart';
 
 class FirebaseAuthProvider implements AuthProvider {
@@ -16,24 +20,36 @@ class FirebaseAuthProvider implements AuthProvider {
 
   /// La méthode createUser crée un nouvel utilisateur avec l'adresse email et le mot de passe spécifiés en utilisant l'API Firebase. Si l'utilisateur est créé avec succès, cette méthode renvoie une instance de [AuthUser] représentant le nouvel utilisateur créé.
   ///Si une erreur se produit pendant la création de l'utilisateur, cette méthode lance une exception correspondante. Les exceptions possibles sont [WeakPasswordAuthException] si le mot de passe fourni est trop faible,[ EmailAlreadyInUseAuthException] si l'adresse email est déjà utilisée par un autre utilisateur, [InvalidEmailAuthException] si l'adresse email fournie est invalide, ou [GenericAuthException] pour toutes les autres erreurs.
-
   @override
   Future<AuthUser> createUser({
     required String email,
     required String password,
+    required String username,
   }) async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      final firebaseUser =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      final user = currentUser;
 
-      if (user != null) {
-        return user;
-      } else {
-        throw UserNotLoggedInAuthException();
-      }
+      final user = CloudUser(
+        userId: firebaseUser.user!.uid,
+        email: firebaseUser.user!.email!,
+        username: username,
+      );
+
+      // Save the user data to Firestore
+      await FirebaseFirestore.instance
+          .collection('user')
+          .doc(firebaseUser.user!.uid)
+          .set({
+        'email': user.email,
+        'username': user.username,
+        'id': user.userId,
+      });
+
+      return AuthUser.fromFirebase(firebaseUser.user!);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         throw WeakPasswordAuthException();
@@ -117,6 +133,26 @@ class FirebaseAuthProvider implements AuthProvider {
       await user.sendEmailVerification();
     } else {
       throw UserNotLoggedInAuthException();
+    }
+  }
+
+  @override
+  Future<void> updateEmail({required String email}) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await user.updateEmail(email);
+    } else {
+      throw CouldNotUpdateUserException();
+    }
+  }
+
+  @override
+  Future<void> updatePassword({required String password}) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await user.updatePassword(password);
+    } else {
+      throw CouldNotUpdateUserException();
     }
   }
 }

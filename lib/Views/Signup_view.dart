@@ -192,6 +192,7 @@ class _SigupViewState extends State<SigupView> {
                         await AuthService.firebase().createUser(
                           email: email,
                           password: password,
+                          username: username,
                         );
                         AuthService.firebase().sendEmailVerification();
 

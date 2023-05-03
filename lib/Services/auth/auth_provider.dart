@@ -18,6 +18,7 @@ abstract class AuthProvider {
   Future<AuthUser> createUser({
     required String email,
     required String password,
+    required String username,
   });
 
   ///La méthode logOut est utilisée pour déconnecter l'utilisateur actuel.
@@ -25,4 +26,8 @@ abstract class AuthProvider {
 
   /// La méthode sendEmailVerification est utilisée pour envoyer une vérification de courrier électronique à l'utilisateur connecté actuellement.
   Future<void> sendEmailVerification();
+
+  Future<void> updateEmail({required String email}) async {}
+
+  Future<void> updatePassword({required String password}) async {}
 }

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:task_management_app/Services/cloud/cloud_storage_constants.dart';
+import 'package:task_management_app/Services/cloud/tasks/cloud_storage_constants.dart';
 
 @immutable
 class CloudTask {

@@ -3,32 +3,35 @@ import 'package:flutter/material.dart';
 import 'package:task_management_app/Services/cloud/tasks/cloud_storage_constants.dart';
 import 'package:task_management_app/Services/cloud/tasks/cloud_storage_exceptions.dart';
 import 'package:task_management_app/Services/cloud/tasks/cloud_task.dart';
+import 'package:task_management_app/Services/cloud/user/cloud_user_constants.dart';
 import 'package:task_management_app/Utilities/color_app.dart';
 
-Future<bool> showUpdateTaskDialog(
-    BuildContext context, CloudTask task, String owner) {
-  final TextEditingController titleController =
-      TextEditingController(text: task.taskTitle);
-  final TextEditingController descriptionController =
-      TextEditingController(text: task.taskDesc);
-  final TextEditingController dateController =
-      TextEditingController(text: task.taskDate);
-  final TextEditingController statusController =
-      TextEditingController(text: task.taskStatus.trim());
+Future<bool> showCreateTaskDialog(BuildContext context, String userID) {
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
+  final TextEditingController statusController = TextEditingController();
+  final tasks = FirebaseFirestore.instance.collection('tasks');
 
-  Future<void> updateTask(CloudTask updatedTask) async {
-    try {
-      final tasks = FirebaseFirestore.instance.collection('tasks');
+  Future<CloudTask> createTask({required String ownerUserid}) async {
+    final document = await tasks.add({
+      owner: ownerUserid,
+      tasktitle: titleController.text,
+      taskdesc: descriptionController.text,
+      taskstatus: statusController.text,
+      taskdate: dateController.text,
+    });
 
-      await tasks.doc(updatedTask.documentId).update({
-        tasktitle: updatedTask.taskTitle,
-        taskdesc: updatedTask.taskDesc,
-        taskdate: updatedTask.taskDate,
-        taskstatus: updatedTask.taskStatus,
-      });
-    } catch (e) {
-      throw CouldNotUpdateTaskException();
-    }
+    final fetchedTask = await document.get();
+
+    return CloudTask(
+      documentId: fetchedTask.id,
+      ownerUserid: userID,
+      taskDesc: titleController.text,
+      taskTitle: descriptionController.text,
+      taskDate: statusController.text,
+      taskStatus: dateController.text,
+    );
   }
 
   return showDialog<bool>(
@@ -36,7 +39,7 @@ Future<bool> showUpdateTaskDialog(
     builder: (context) {
       return AlertDialog(
         title: const Text(
-          'Update task',
+          'Create task',
           style: TextStyle(color: ColorApp.fthColor),
         ),
         content: Column(
@@ -71,7 +74,7 @@ Future<bool> showUpdateTaskDialog(
                 labelText: 'Status',
                 border: OutlineInputBorder(),
               ),
-              value: statusController.text,
+              value: null,
               items: const [
                 DropdownMenuItem(
                   value: 'in progress',
@@ -101,19 +104,11 @@ Future<bool> showUpdateTaskDialog(
           ),
           TextButton(
             onPressed: () async {
-              final updatedTask = CloudTask(
-                documentId: task.documentId,
-                taskTitle: titleController.text,
-                taskDesc: descriptionController.text,
-                taskDate: dateController.text,
-                taskStatus: statusController.text,
-                ownerUserid: owner,
-              );
-              await updateTask(updatedTask);
-
+              await createTask(ownerUserid: userID);
+              // ignore: use_build_context_synchronously
               Navigator.of(context).pop(true);
             },
-            child: const Text('Update'),
+            child: const Text('Create'),
           ),
         ],
       );

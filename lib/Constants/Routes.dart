@@ -4,3 +4,4 @@ const mytasksRoute = '/mytasks';
 const verifyEmailRoute = '/verifyEmail';
 const myProfieRoute = '/myprofile';
 const homeRoute = '/home';
+const statsRout = '/stats';

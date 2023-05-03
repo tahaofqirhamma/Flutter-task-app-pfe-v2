@@ -27,4 +27,6 @@ class AuthUser {
         email: user.email!,
         id: user.uid,
       );
+
+  String? get uid => null;
 }

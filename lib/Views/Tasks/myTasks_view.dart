@@ -1,10 +1,12 @@
+// ignore_for_file: avoid_unnecessary_containers
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:task_management_app/Constants/Routes.dart';
 import 'package:task_management_app/Services/auth/auth_service.dart';
-import 'package:task_management_app/Services/cloud/cloud_task.dart';
-import 'package:task_management_app/Services/cloud/firebase_cloud_storage.dart';
+import 'package:task_management_app/Services/cloud/tasks/cloud_task.dart';
+import 'package:task_management_app/Services/cloud/tasks/firebase_cloud_storage.dart';
 import 'dart:developer' as devtools;
 
 import 'package:task_management_app/Utilities/color_app.dart';
@@ -40,7 +42,69 @@ class _MyTasksViewState extends State<MyTasksView> {
             return const Center(child: CircularProgressIndicator());
           }
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No tasks found'));
+            return Container(
+              color: ColorApp.white,
+              padding: const EdgeInsets.all(30),
+              child: Material(
+                color: ColorApp.white,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  homeRoute, (route) => false);
+                            },
+                            icon: const Icon(
+                              Icons.arrow_back,
+                              size: 34,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        width: 400, // Set the desired width of the image
+                        height: 400, // Set the desired height of the image
+                        // Center the image horizontally and vertically
+
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(
+                              "lib/assets/backgrounds/notasks.png",
+                            ),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 80,
+                      ),
+                      Container(
+                        child: const Text(
+                          "No task created yet !!",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: ColorApp.grey,
+                            decoration: TextDecoration.none,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              homeRoute, (route) => false);
+                        },
+                        child: const Text('+ Create new task'),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            );
           }
           final tasks = snapshot.data!;
           return Scaffold(
@@ -54,7 +118,7 @@ class _MyTasksViewState extends State<MyTasksView> {
                     children: [
                       Container(
                           height: 220,
-                          padding: const EdgeInsets.all(30),
+                          padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
                               color: ColorApp.scndColor,
                               border: Border.all(
@@ -89,7 +153,7 @@ class _MyTasksViewState extends State<MyTasksView> {
                                 ],
                               ),
                               Container(
-                                padding: EdgeInsets.zero,
+                                padding: EdgeInsets.all(0),
                                 decoration: BoxDecoration(
                                     border: Border.all(
                                         width: 0.4,
@@ -225,7 +289,7 @@ class _MyTasksViewState extends State<MyTasksView> {
                             return const SizedBox.shrink();
                           }
                           return Padding(
-                            padding: const EdgeInsets.all(23),
+                            padding: const EdgeInsets.all(20),
                             child: Container(
                               height: 190,
                               decoration: const BoxDecoration(

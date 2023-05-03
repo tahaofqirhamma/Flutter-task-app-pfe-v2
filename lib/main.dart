@@ -4,6 +4,7 @@ import 'package:task_management_app/Views/Login_view.dart';
 import 'package:task_management_app/Views/My_profile_view.dart';
 import 'package:task_management_app/Views/Signup_view.dart';
 import 'package:task_management_app/Views/Tasks/myTasks_view.dart';
+import 'package:task_management_app/Views/Tasks/statistics_task_view.dart';
 import 'package:task_management_app/Views/home_view.dart';
 import 'package:task_management_app/Views/landing_view.dart';
 
@@ -24,7 +25,7 @@ void main() {
       homeRoute: (context) => const HomeView(),
       myProfieRoute: (context) => const MyProfile(),
       mytasksRoute: (context) => MyTasksView(),
-      // notesRoute: (context) => const NotesView(),
+      statsRout: (context) => StatisticsView()
       // verifyEmailRoute: (context) => const VerifyEmailView(),
       // newNoteRoute: (context) => const NewNoteView()
     },
@@ -51,7 +52,7 @@ class HomePage extends StatelessWidget {
               return const LandingView();
             }
           }
-          return const CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         });
   }
 }

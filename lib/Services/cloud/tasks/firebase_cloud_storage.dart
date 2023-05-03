@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:task_management_app/Services/cloud/cloud_storage_exceptions.dart';
-import 'package:task_management_app/Services/cloud/cloud_task.dart';
+import 'package:task_management_app/Services/cloud/tasks/cloud_storage_exceptions.dart';
+import 'package:task_management_app/Services/cloud/tasks/cloud_task.dart';
 
 import 'cloud_storage_constants.dart';
 
@@ -41,12 +41,6 @@ class FirebaseCloudStorage {
     }
   }
 
-  Future<void> updateProfile(
-      {required String ownerUserid,
-      required String username,
-      required String password,
-      required String email}) async {}
-
   Future<void> deleteTask({required String documentId}) async {
     try {
       await tasks.doc(documentId).delete();
@@ -54,13 +48,6 @@ class FirebaseCloudStorage {
       throw CouldNotDeleteTaskException();
     }
   }
-
-  Stream<Iterable<CloudTask>> allTasks({required String ownerUserid}) =>
-      tasks.snapshots().map((event) => event.docs
-          .map(
-            (doc) => CloudTask.fromSnapshot(doc),
-          )
-          .where((task) => task.ownerUserid == ownerUserid));
 
   Future<Iterable<CloudTask>> getTasks({required String ownerUserid}) async {
     try {
@@ -95,25 +82,12 @@ class FirebaseCloudStorage {
     }
   }
 
-  Future<int> getNumberOfTasksCreated({required String ownerUserid}) async {
-    try {
-      final tasks = await getTasks(ownerUserid: ownerUserid);
-      return tasks.length;
-    } catch (e) {
-      throw CouldNotGetAllTasksException();
-    }
-  }
-
-  Future<int> getNumberOfTasksInProgress({required String ownerUserid}) async {
-    try {
-      final tasks = await getTasks(ownerUserid: ownerUserid);
-      return tasks
-          .where((element) => element.taskStatus == "in progress")
-          .length;
-    } catch (e) {
-      throw CouldNotGetAllTasksException();
-    }
-  }
+  Stream<Iterable<CloudTask>> allTasks({required String ownerUserid}) =>
+      tasks.snapshots().map((event) => event.docs
+          .map(
+            (doc) => CloudTask.fromSnapshot(doc),
+          )
+          .where((task) => task.ownerUserid == ownerUserid));
 
   factory FirebaseCloudStorage() => _shared;
   static final FirebaseCloudStorage _shared =
