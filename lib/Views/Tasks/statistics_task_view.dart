@@ -12,6 +12,7 @@ class StatisticsView extends StatefulWidget {
   const StatisticsView({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _StatisticsViewState createState() => _StatisticsViewState();
 }
 
@@ -40,6 +41,7 @@ class _StatisticsViewState extends State<StatisticsView> {
           }).toList();
 
           final chartData = buildStackedBarChart(tasks);
+
           final allTasks = tasks.length;
           final canceledTasks =
               tasks.where((task) => task.taskStatus == "canceled").length;
@@ -49,7 +51,7 @@ class _StatisticsViewState extends State<StatisticsView> {
 
           return SingleChildScrollView(
             child: Container(
-              height: 1400,
+              height: 1350,
               color: const Color.fromARGB(255, 242, 242, 242),
               child: Column(
                 children: [

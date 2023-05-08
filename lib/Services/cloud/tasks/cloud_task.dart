@@ -21,7 +21,7 @@ class CloudTask {
   });
 
   CloudTask.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
-      : documentId = snapshot.id as String,
+      : documentId = snapshot.id,
         ownerUserid = snapshot.data()[owner] as String,
         taskTitle = snapshot.data()[tasktitle] as String,
         taskDesc = snapshot.data()[taskdesc] as String,

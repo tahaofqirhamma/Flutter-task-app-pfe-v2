@@ -1,16 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:task_management_app/Services/cloud/tasks/cloud_storage_constants.dart';
-import 'package:task_management_app/Services/cloud/tasks/cloud_storage_exceptions.dart';
 import 'package:task_management_app/Services/cloud/tasks/cloud_task.dart';
-import 'package:task_management_app/Services/cloud/user/cloud_user_constants.dart';
 import 'package:task_management_app/Utilities/color_app.dart';
 
 Future<bool> showCreateTaskDialog(BuildContext context, String userID) {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
-  final TextEditingController dateController = TextEditingController();
   final TextEditingController statusController = TextEditingController();
+  final dateController = TextEditingController();
+
   final tasks = FirebaseFirestore.instance.collection('tasks');
 
   Future<CloudTask> createTask({required String ownerUserid}) async {
@@ -60,13 +62,41 @@ Future<bool> showCreateTaskDialog(BuildContext context, String userID) {
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 9),
             TextField(
               controller: dateController,
+              readOnly: true,
               decoration: const InputDecoration(
                 labelText: 'Date',
                 border: OutlineInputBorder(),
               ),
+              onTap: () async {
+                final pickedDate = await DatePicker.showDateTimePicker(
+                  context,
+                  showTitleActions: true,
+                  minTime: DateTime.now(),
+                  maxTime: DateTime.now().add(const Duration(days: 365)),
+                  theme: const DatePickerTheme(
+                    backgroundColor: Colors.white,
+                    headerColor: ColorApp.prpColor,
+                    itemStyle: TextStyle(
+                      color: ColorApp.prpColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                    doneStyle: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                );
+
+                if (pickedDate != null) {
+                  dateController.text =
+                      DateFormat('dd/MM/yyyy HH:mm').format(pickedDate);
+                }
+              },
             ),
             const SizedBox(height: 10),
             DropdownButtonFormField<String>(
@@ -90,7 +120,11 @@ Future<bool> showCreateTaskDialog(BuildContext context, String userID) {
                 ),
               ],
               onChanged: (value) {
-                statusController.text = value!;
+                if (value == null) {
+                  statusController.text = 'in progress';
+                } else {
+                  statusController.text = value;
+                }
               },
             ),
           ],

@@ -1,47 +1,67 @@
 import 'dart:ui';
-
+import 'package:intl/intl.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
-import 'package:task_management_app/Services/cloud/tasks/cloud_storage_constants.dart';
 import 'package:task_management_app/Services/cloud/tasks/cloud_task.dart';
+import 'dart:developer' as devtools;
 
-List<charts.Series<StackedBarChartData, String>> buildStackedBarChart(
-    Iterable<CloudTask> tasks) {
-  // Group tasks by status and due date
-  Map<String, Map<String, int>> data = {};
-  for (var task in tasks) {
+List<charts.Series<dynamic, String>> buildStackedBarChart(
+  Iterable<CloudTask> tasks,
+) {
+  Map<String, Map<DateTime, int>> data = {};
+  final taskStatusOrder = ["canceled", "in progress", "completed"];
+  final statusValues = {
+    for (var status in taskStatusOrder) status: taskStatusOrder.indexOf(status)
+  };
+  final sortedTasks = List<CloudTask>.from(tasks)
+    ..sort((a, b) {
+      final dueDateComparison = DateFormat('dd/MM')
+          .parse(a.taskDate)
+          .compareTo(DateFormat('dd/MM').parse(b.taskDate));
+      if (dueDateComparison != 0) {
+        return dueDateComparison;
+      } else {
+        final aStatusValue = statusValues[a.taskStatus];
+        final bStatusValue = statusValues[b.taskStatus];
+        return aStatusValue!.compareTo(bStatusValue!);
+      }
+    });
+
+  for (var task in sortedTasks) {
+    devtools.log('${task.taskDate}: ${task.taskStatus}');
+  }
+
+  for (var task in sortedTasks) {
     String status = task.taskStatus;
-    String dueDate = task.taskDate;
+    DateTime dueDate = DateFormat('dd/MM').parse(task.taskDate);
     data[status] ??= {};
     data[status]![dueDate] ??= 0;
     data[status]![dueDate] = (data[status]![dueDate] ?? 0) + 1;
   }
 
-  // Build data series for each status
-  /// This code is building a list of `charts.Series` objects, which will be used to create a stacked bar
-  /// chart.
-  List<charts.Series<StackedBarChartData, String>> seriesList = [];
+  List<charts.Series<dynamic, String>> seriesList = [];
   data.forEach((status, dateCounts) {
     List<StackedBarChartData> seriesData = [];
     dateCounts.forEach((date, count) {
       seriesData.add(StackedBarChartData(date, count));
     });
+    seriesData
+        .sort((a, b) => a.date.compareTo(b.date)); // sort the data by date
     seriesList.add(
-      charts.Series<StackedBarChartData, String>(
+      charts.Series<dynamic, String>(
         id: status,
         colorFn: (_, __) => getColorByStatus(status),
         data: seriesData,
-        domainFn: (StackedBarChartData data, _) => data.date.substring(0, 5),
-        measureFn: (StackedBarChartData data, _) => data.count,
+        domainFn: (dynamic data, _) => DateFormat('dd/MM').format(data.date),
+        measureFn: (dynamic data, _) => data.count,
       ),
     );
   });
-
   return seriesList;
 }
 
 class StackedBarChartData {
-  final String date;
+  final DateTime date;
   final int count;
 
   StackedBarChartData(this.date, this.count);

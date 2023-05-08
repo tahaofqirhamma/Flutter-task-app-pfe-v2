@@ -7,7 +7,6 @@ import 'package:task_management_app/Views/Tasks/myTasks_view.dart';
 import 'package:task_management_app/Views/Tasks/statistics_task_view.dart';
 import 'package:task_management_app/Views/home_view.dart';
 import 'package:task_management_app/Views/landing_view.dart';
-
 import 'Constants/Routes.dart';
 
 void main() {

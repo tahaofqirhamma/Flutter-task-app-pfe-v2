@@ -106,7 +106,12 @@ class _MyTasksViewState extends State<MyTasksView> {
               ),
             );
           }
-          final tasks = snapshot.data!;
+          final tasks = snapshot.data!.toList()
+            ..sort((a, b) => DateFormat('dd/MM/yyyy HH:mm')
+                .parse(a.taskDate)
+                .compareTo(DateFormat('dd/MM/yyyy HH:mm').parse(b.taskDate)))
+            ..forEach((task) => print('${task.taskDate}: ${task.taskTitle}'));
+
           return Scaffold(
             body: Padding(
               padding: const EdgeInsets.all(0),
