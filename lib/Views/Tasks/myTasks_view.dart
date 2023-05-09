@@ -33,13 +33,14 @@ class _MyTasksViewState extends State<MyTasksView> {
 
   @override
   Widget build(BuildContext context) {
-    devtools.log(widget.userId);
-
     return StreamBuilder<Iterable<CloudTask>>(
         stream: _tasksStream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+                child: CircularProgressIndicator(
+              color: ColorApp.fthColor,
+            ));
           }
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Container(
@@ -107,9 +108,9 @@ class _MyTasksViewState extends State<MyTasksView> {
             );
           }
           final tasks = snapshot.data!.toList()
-            ..sort((a, b) => DateFormat('dd/MM/yyyy HH:mm')
+            ..sort((a, b) => DateFormat('yyyy-MM-dd HH:mm:ss')
                 .parse(a.taskDate)
-                .compareTo(DateFormat('dd/MM/yyyy HH:mm').parse(b.taskDate)))
+                .compareTo(DateFormat('yyyy-MM-dd HH:mm:ss').parse(b.taskDate)))
             ..forEach((task) => print('${task.taskDate}: ${task.taskTitle}'));
 
           return Scaffold(

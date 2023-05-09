@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:task_management_app/Services/auth/auth_service.dart';
+import 'package:task_management_app/Services/notiffications/notifications_service.dart';
+import 'package:task_management_app/Utilities/color_app.dart';
 import 'package:task_management_app/Views/Login_view.dart';
 import 'package:task_management_app/Views/My_profile_view.dart';
 import 'package:task_management_app/Views/Signup_view.dart';
@@ -8,9 +10,13 @@ import 'package:task_management_app/Views/Tasks/statistics_task_view.dart';
 import 'package:task_management_app/Views/home_view.dart';
 import 'package:task_management_app/Views/landing_view.dart';
 import 'Constants/Routes.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  NotificationService().initNotification();
+  tz.initializeTimeZones();
+
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     title: 'Flutter Demo',
@@ -24,7 +30,7 @@ void main() {
       homeRoute: (context) => const HomeView(),
       myProfieRoute: (context) => const MyProfile(),
       mytasksRoute: (context) => MyTasksView(),
-      statsRout: (context) => StatisticsView()
+      statsRout: (context) => const StatisticsView()
       // verifyEmailRoute: (context) => const VerifyEmailView(),
       // newNoteRoute: (context) => const NewNoteView()
     },
@@ -51,7 +57,10 @@ class HomePage extends StatelessWidget {
               return const LandingView();
             }
           }
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+              child: CircularProgressIndicator(
+            color: ColorApp.white,
+          ));
         });
   }
 }

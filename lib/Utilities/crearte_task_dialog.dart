@@ -5,7 +5,9 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:task_management_app/Services/cloud/tasks/cloud_storage_constants.dart';
 import 'package:task_management_app/Services/cloud/tasks/cloud_task.dart';
+import 'package:task_management_app/Services/notiffications/notifications_service.dart';
 import 'package:task_management_app/Utilities/color_app.dart';
+import 'dart:developer' as devtools;
 
 Future<bool> showCreateTaskDialog(BuildContext context, String userID) {
   final TextEditingController titleController = TextEditingController();
@@ -25,14 +27,23 @@ Future<bool> showCreateTaskDialog(BuildContext context, String userID) {
     });
 
     final fetchedTask = await document.get();
+    DateTime scheduledDateTime =
+        DateFormat('yyyy-MM-dd HH:mm:ss').parse(fetchedTask.data()![taskdate]);
+
+    NotificationService().scheduleNotification(
+      scheduledNotificationDateTime: scheduledDateTime,
+      id: 0,
+      title: 'Task To Do',
+      body: '${fetchedTask.data()![tasktitle]}',
+    );
 
     return CloudTask(
       documentId: fetchedTask.id,
-      ownerUserid: userID,
-      taskDesc: titleController.text,
-      taskTitle: descriptionController.text,
-      taskDate: statusController.text,
-      taskStatus: dateController.text,
+      ownerUserid: ownerUserid,
+      taskDesc: descriptionController.text,
+      taskTitle: titleController.text,
+      taskDate: dateController.text,
+      taskStatus: statusController.text,
     );
   }
 
@@ -94,7 +105,7 @@ Future<bool> showCreateTaskDialog(BuildContext context, String userID) {
 
                 if (pickedDate != null) {
                   dateController.text =
-                      DateFormat('dd/MM/yyyy HH:mm').format(pickedDate);
+                      DateFormat('yyyy-MM-dd HH:mm:ss').format(pickedDate);
                 }
               },
             ),

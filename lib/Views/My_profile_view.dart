@@ -48,8 +48,9 @@ class _MyProfiletState extends State<MyProfile> {
         builder: (context, snapshot) {
           if (!snapshot.hasData || snapshot.data == null) {
             return const Center(
-                child:
-                    CircularProgressIndicator()); // or any other widget to show a loading state
+                child: CircularProgressIndicator(
+              color: ColorApp.fthColor,
+            )); // or any other widget to show a loading state
           }
           final userData = snapshot.data!.data() as Map<String, dynamic>;
           final user = CloudUser(

@@ -15,9 +15,9 @@ List<charts.Series<dynamic, String>> buildStackedBarChart(
   };
   final sortedTasks = List<CloudTask>.from(tasks)
     ..sort((a, b) {
-      final dueDateComparison = DateFormat('dd/MM')
+      final dueDateComparison = DateFormat('MM-dd')
           .parse(a.taskDate)
-          .compareTo(DateFormat('dd/MM').parse(b.taskDate));
+          .compareTo(DateFormat('MM-dd').parse(b.taskDate));
       if (dueDateComparison != 0) {
         return dueDateComparison;
       } else {
@@ -28,12 +28,8 @@ List<charts.Series<dynamic, String>> buildStackedBarChart(
     });
 
   for (var task in sortedTasks) {
-    devtools.log('${task.taskDate}: ${task.taskStatus}');
-  }
-
-  for (var task in sortedTasks) {
     String status = task.taskStatus;
-    DateTime dueDate = DateFormat('dd/MM').parse(task.taskDate);
+    DateTime dueDate = DateFormat('MM-dd').parse(task.taskDate);
     data[status] ??= {};
     data[status]![dueDate] ??= 0;
     data[status]![dueDate] = (data[status]![dueDate] ?? 0) + 1;
@@ -52,7 +48,7 @@ List<charts.Series<dynamic, String>> buildStackedBarChart(
         id: status,
         colorFn: (_, __) => getColorByStatus(status),
         data: seriesData,
-        domainFn: (dynamic data, _) => DateFormat('dd/MM').format(data.date),
+        domainFn: (dynamic data, _) => DateFormat('MM-dd').format(data.date),
         measureFn: (dynamic data, _) => data.count,
       ),
     );

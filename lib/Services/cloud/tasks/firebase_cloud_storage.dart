@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:task_management_app/Services/cloud/tasks/cloud_storage_exceptions.dart';
 import 'package:task_management_app/Services/cloud/tasks/cloud_task.dart';
+import 'package:task_management_app/Services/notiffications/notifications_service.dart';
+import 'dart:developer' as devtools;
 
 import 'cloud_storage_constants.dart';
 
@@ -17,6 +20,11 @@ class FirebaseCloudStorage {
     });
 
     final fetchedTask = await document.get();
+    if (fetchedTask.data()!['taskdate']) {
+      devtools.log("dds");
+    } else {
+      devtools.log('message');
+    }
 
     return CloudTask(
       documentId: fetchedTask.id,

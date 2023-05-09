@@ -51,7 +51,7 @@ class _StatisticsViewState extends State<StatisticsView> {
 
           return SingleChildScrollView(
             child: Container(
-              height: 1350,
+              height: 1450,
               color: const Color.fromARGB(255, 242, 242, 242),
               child: Column(
                 children: [
@@ -91,7 +91,11 @@ class _StatisticsViewState extends State<StatisticsView> {
                   Container(
                     height: 300,
                     padding: const EdgeInsets.all(30),
-                    color: ColorApp.scndColor,
+                    decoration: const BoxDecoration(
+                        color: ColorApp.scndColor,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(50),
+                        )),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -190,6 +194,9 @@ class _StatisticsViewState extends State<StatisticsView> {
                       ],
                     ),
                   ),
+                  const SizedBox(
+                    height: 45,
+                  ),
                   Container(
                     width: 500,
                     height: 250,
@@ -197,8 +204,7 @@ class _StatisticsViewState extends State<StatisticsView> {
                     decoration: const BoxDecoration(
                       color: ColorApp.white,
                       borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(40),
-                        bottomRight: Radius.circular(40),
+                        topRight: Radius.circular(50),
                       ),
                     ),
                     child: Column(
