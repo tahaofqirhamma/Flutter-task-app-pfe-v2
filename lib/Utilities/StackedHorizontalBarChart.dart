@@ -29,7 +29,7 @@ List<charts.Series<dynamic, String>> buildStackedBarChart(
 
   for (var task in sortedTasks) {
     String status = task.taskStatus;
-    DateTime dueDate = DateFormat('MM-dd').parse(task.taskDate);
+    DateTime dueDate = DateFormat('yyyy-MM-dd').parse(task.taskDate);
     data[status] ??= {};
     data[status]![dueDate] ??= 0;
     data[status]![dueDate] = (data[status]![dueDate] ?? 0) + 1;

@@ -91,7 +91,7 @@ Future<bool> showUpdateTaskDialog(
 
                 if (pickedDate != null) {
                   dateController.text =
-                      DateFormat('dd/MM/yyyy HH:mm').format(pickedDate);
+                      DateFormat('yyyy-MM-dd HH:mm:ss').format(pickedDate);
                 }
               },
             ),
@@ -141,6 +141,7 @@ Future<bool> showUpdateTaskDialog(
               );
               await updateTask(updatedTask);
 
+              // ignore: use_build_context_synchronously
               Navigator.of(context).pop(true);
             },
             child: const Text('Update'),

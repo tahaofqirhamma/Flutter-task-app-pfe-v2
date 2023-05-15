@@ -50,6 +50,7 @@ dependencies:
   community_charts_flutter: ^1.0.1
   awesome_notifications: ^0.7.4+1
   flutter_launcher_icons: ^0.13.1
+  lottie: ^2.3.2
 
 dev_dependencies:
   flutter_test:
